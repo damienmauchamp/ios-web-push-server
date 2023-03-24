@@ -54,12 +54,12 @@ app.use(pushRoutes);
  * @type {null}
  */
 import bodyParser from "body-parser";
-// create application/json parser
-let jsonParser = bodyParser.json()
-// create application/x-www-form-urlencoded parser
-let urlencodedParser = bodyParser.urlencoded({ extended: false })
+// // create application/json parser
+// let jsonParser = bodyParser.json()
+// // create application/x-www-form-urlencoded parser
+// let urlencodedParser = bodyParser.urlencoded({ extended: false })
 let subscriptionData = null;
-app.post('/send-notification', (req, res) => {
+app.post('/send-notification', async (req, res) => {
 	if (!subscriptionData) {
 		console.log('No subscription', req.body)
 		res.sendStatus(200);
