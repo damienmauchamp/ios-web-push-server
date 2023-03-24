@@ -5,13 +5,13 @@
   "description": "",
   "license": "",
   "type": "module",
-  "main": "server.mjs",
+  "main": "server/index.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "update": "git pull && npm install",
-    "start": "node server.mjs",
-    "watch": "nodemon server.mjs",
-    "certs": "sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/privkey.pem certs/private.pem && sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/cert.pem certs/ && sudo chmod +r certs/*.pem"
+    "start": "node server/index.mjs",
+    "watch": "nodemon index/server.mjs",
+    "certs": "sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/privkey.pem server/certs/private.pem && sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/cert.pem certs/ && sudo chmod +r certs/*.pem"
   },
   "dependencies": {
     "access-log": "^0.4.1",

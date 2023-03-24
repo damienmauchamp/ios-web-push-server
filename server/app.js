@@ -1,10 +1,22 @@
-import express from "express";
-import webpush from "web-push";
-import dotenv  from "dotenv";
-import cors    from 'cors';
+import express         from "express";
+import webpush         from "web-push";
+import dotenv          from "dotenv";
+import cors            from 'cors';
+import {fileURLToPath} from 'url';
+import path            from 'path';
+
+//
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // dotenv
-dotenv.config();
+// dotenv.config({path:`${__dirname}/.env`});
+dotenv.config({path: `${path.normalize(__dirname)}/.env`});
+// dotenv.config();
+
+console.log(`${path.normalize(__dirname)}/certs/${process.env.VAPID_PUBLIC_KEY}`)
+console.log(`${path.normalize(__dirname)}/certs/${process.env.VAPID_PRIVATE_KEY}`)
+console.log(process.env.VAPID_MAILTO)
 
 // web push
 webpush.setVapidDetails(
@@ -33,13 +45,14 @@ app.use((request, response, next) => {
 // parse requests of content-type - application/json
 app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 // force https
 app.enable('trust proxy')
 
 // static
 app.use(express.static("./public"));
+app.use(express.static("./public/assets"));
 
 // Routes
 import appRoutes           from './routes/apps.js';
