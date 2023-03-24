@@ -1,5 +1,7 @@
 #
 
+`auth` a l'air d'être l'identifiant de l'appareil
+
 ## subscription
 
 ```bash
