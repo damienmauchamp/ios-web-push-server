@@ -1,0 +1,26 @@
+{
+  "name": "ios-web-push-server",
+  "version": "0.0.1",
+  "author": "Damien Mauchamp <damienmauchamp@gmail.com>",
+  "description": "",
+  "license": "",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "update": "git pull && npm install",
+    "start": "node server.mjs",
+    "watch": "nodemon server.mjs",
+    "certs": "sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/privkey.pem certs/private.pem && sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/cert.pem certs/ && sudo chmod +r certs/*.pem"
+  },
+  "dependencies": {
+    "access-log": "^0.4.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3",
+    "nodemon": "^2.0.21",
+    "web-push": "^3.5.0"
+  }
+}
