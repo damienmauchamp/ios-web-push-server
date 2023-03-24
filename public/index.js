@@ -19,8 +19,7 @@ let post = (url, body = {}) => fetch(url, {
 	headers: {
 		"Content-Type": "application/json"
 	},
-	// body: JSON.stringify(body),
-	body: body,
+	body: JSON.stringify(body),
 })
 
 let send = (body = null, title = null) => post("/send-notification", {
