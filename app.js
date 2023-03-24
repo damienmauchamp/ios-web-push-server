@@ -16,14 +16,6 @@ webpush.setVapidDetails(
 // app
 const app = express();
 
-// parse requests of content-type - application/json
-app.use(express.json());
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
-
-// force https
-app.enable('trust proxy')
-
 // cors
 app.use(cors({origin: true}));
 
@@ -37,6 +29,14 @@ app.use((request, response, next) => {
 	}
 	next();
 })
+
+// parse requests of content-type - application/json
+app.use(express.json());
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
+// force https
+app.enable('trust proxy')
 
 // static
 app.use(express.static("./public"));
@@ -68,7 +68,7 @@ app.post('/send-notification', async (req, res) => {
 		console.log('No subscription', req.body)
 		res.sendStatus(200);
 	} else {
-		console.log('Subscription found', req.body)
+		console.log('Subscription found, body:', req.body)
 
 		let message = JSON.stringify({
 			title: req.body.title || 'Titre par défaut',

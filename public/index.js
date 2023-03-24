@@ -14,22 +14,21 @@ function urlBase64ToUint8Array(base64String) {
 const baseUrl = ''; // 'https://pi.dmchp.fr:33667';
 const publicKey = "BKe9_9n2T7H390_cF5AncgzlIfv5rH0pKWm62aCqt60VFTsWTiCoYh9u2ALkwv_xIfjIPviDSESVPZ-Z7xZNlMY"
 
-// let send = () => fetch(baseUrl + "/send-notification")
-let send = (body = null, title = null) => fetch(baseUrl + "/send-notification", {
+let post = (url, body = {}) => fetch(baseUrl + "/send-notification", {
 	method: "post",
-	headers: {"Content-Type": "application/json"},
-	body: JSON.stringify({
-		title: title,
-		body: body,
-	}),
+	headers: {
+		"Content-Type": "application/json"
+	},
+	body: JSON.stringify(body),
+})
+
+let send = (body = null, title = null) => post("/send-notification", {
+	title: title,
+	body: body,
 }).then(res => console.log('[RES] res', res)).catch(err => console.error('[RES] err', err))
 
-let saveSubscription = (subscription) => fetch(baseUrl + "/save-subscription", {
-	method: "post",
-	headers: {"Content-Type": "application/json"},
-	body: JSON.stringify({
-		subscription: subscription,
-	}),
+let saveSubscription = (subscription) => post("/save-subscription", {
+	subscription: subscription,
 }).then(res => {
 	console.log(res, '[sub] ok')
 	send();
@@ -37,13 +36,9 @@ let saveSubscription = (subscription) => fetch(baseUrl + "/save-subscription", {
 	console.error(err, '[sub] err : ' + err + ' ' + err.statusText + ' - ' + err.status)
 });
 
-let saveUnsubscription = (subscription, successful) => fetch(baseUrl + "/save-unsubscription", {
-	method: "post",
-	headers: {"Content-Type": "application/json"},
-	body: JSON.stringify({
-		subscription: subscription,
-		successful: successful,
-	}),
+let saveUnsubscription = (subscription, successful) => post("/save-unsubscription", {
+	subscription: subscription,
+	successful: successful,
 }).then(res => {
 	console.log(res, '[unsub] ok')
 }).catch(err => {
