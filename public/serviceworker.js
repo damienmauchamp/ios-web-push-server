@@ -29,7 +29,7 @@ self.addEventListener("push", async (event) => {
 
 	}
 
-	// todo : https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/showNotification
+	// https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/showNotification
 	await self.registration.showNotification(title, {
 		body,
 	});
