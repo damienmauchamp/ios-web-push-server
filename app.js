@@ -15,7 +15,7 @@ webpush.setVapidDetails(
 
 // app
 const app = express();
-// app.use(express.json());
+app.use(express.json());
 
 // force https
 app.enable('trust proxy')
