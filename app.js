@@ -53,7 +53,7 @@ app.use(pushRoutes);
  * test routes
  * @type {null}
  */
-import bodyParser from "body-parser";
+// import bodyParser from "body-parser";
 // // create application/json parser
 // let jsonParser = bodyParser.json()
 // // create application/x-www-form-urlencoded parser
