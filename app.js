@@ -55,9 +55,9 @@ app.use(pushRoutes);
  */
 import bodyParser from "body-parser";
 // create application/json parser
-// let jsonParser = bodyParser.json()
+let jsonParser = bodyParser.json()
 // create application/x-www-form-urlencoded parser
-let urlencodedParser = bodyParser.urlencoded({ extended: false })
+// let urlencodedParser = bodyParser.urlencoded({ extended: false })
 let subscriptionData = null;
 app.post('/send-notification', urlencodedParser, (req, res) => {
 	if (!subscriptionData) {
