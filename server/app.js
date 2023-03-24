@@ -10,13 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // dotenv
-// dotenv.config({path:`${__dirname}/.env`});
 dotenv.config({path: `${path.normalize(__dirname)}/.env`});
-// dotenv.config();
-
-console.log(`${path.normalize(__dirname)}/certs/${process.env.VAPID_PUBLIC_KEY}`)
-console.log(`${path.normalize(__dirname)}/certs/${process.env.VAPID_PRIVATE_KEY}`)
-console.log(process.env.VAPID_MAILTO)
 
 // web push
 webpush.setVapidDetails(
