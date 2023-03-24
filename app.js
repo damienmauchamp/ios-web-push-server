@@ -70,12 +70,6 @@ app.post('/send-notification', async (req, res) => {
 	} else {
 		console.log('Subscription found, body:', req.body)
 
-		let title = req.body.title,
-			body = req.body.body
-
-		console.log('title:', title)
-		console.log('body:', body)
-
 		let message = JSON.stringify({
 			title: req.body.title || 'Titre par défaut',
 			body: req.body.body || 'Message par défaut',
