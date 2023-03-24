@@ -15,7 +15,7 @@ webpush.setVapidDetails(
 
 // app
 const app = express();
-app.use(express.json());
+// app.use(express.json());
 
 // force https
 app.enable('trust proxy')
@@ -55,11 +55,11 @@ app.use(pushRoutes);
  */
 import bodyParser from "body-parser";
 // create application/json parser
-let jsonParser = bodyParser.json()
-// // create application/x-www-form-urlencoded parser
-// let urlencodedParser = bodyParser.urlencoded({ extended: false })
+// let jsonParser = bodyParser.json()
+// create application/x-www-form-urlencoded parser
+let urlencodedParser = bodyParser.urlencoded({ extended: false })
 let subscriptionData = null;
-app.post('/send-notification', jsonParser, (req, res) => {
+app.post('/send-notification', urlencodedParser, (req, res) => {
 	if (!subscriptionData) {
 		console.log('No subscription', req.body)
 		res.sendStatus(200);
