@@ -18,10 +18,10 @@ const publicKey = "BKe9_9n2T7H390_cF5AncgzlIfv5rH0pKWm62aCqt60VFTsWTiCoYh9u2ALkw
 let send = (body = null, title = null) => fetch(baseUrl + "/send-notification", {
 	method: "post",
 	headers: {"Content-Type": "application/json"},
-	body: JSON.stringify({
+	body: {
 		title: title,
 		body: body,
-	}),
+	},
 }).then(res => console.log('[RES] res', res)).catch(err => console.error('[RES] err', err))
 
 let saveSubscription = (subscription) => fetch(baseUrl + "/save-subscription", {
