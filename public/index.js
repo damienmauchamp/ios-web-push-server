@@ -14,7 +14,7 @@ function urlBase64ToUint8Array(base64String) {
 const baseUrl = ''; // 'https://pi.dmchp.fr:33667';
 const publicKey = "BKe9_9n2T7H390_cF5AncgzlIfv5rH0pKWm62aCqt60VFTsWTiCoYh9u2ALkwv_xIfjIPviDSESVPZ-Z7xZNlMY"
 
-let post = (url, body = {}) => fetch(baseUrl + "/send-notification", {
+let post = (url, body = {}) => fetch(url, {
 	method: "post",
 	headers: {
 		"Content-Type": "application/json"
@@ -32,7 +32,7 @@ let saveSubscription = (subscription) => post("/save-subscription", {
 	subscription: subscription,
 }).then(res => {
 	console.log(res, '[sub] ok')
-	send();
+	send("J'suis abonné !", 'Ouais ouais ouaisssssss');
 }).catch(err => {
 	console.error(err, '[sub] err : ' + err + ' ' + err.statusText + ' - ' + err.status)
 });
@@ -57,7 +57,7 @@ async function run() {
 
 	const sendButton = document.getElementById("send");
 	sendButton.addEventListener("click", async () => {
-		await send();
+		await send('Big test', 'Ceci est un putain de test !');
 	});
 
 	const button = document.getElementById("subscribe");
