@@ -102,6 +102,8 @@ export function authApp(req, res, next) {
 	try {
 
 		const token = getToken(req);
+		console.log('[authApp] token:', token)
+
 		isApp(token).then(app => {
 
 			if (app.error) {
