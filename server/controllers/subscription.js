@@ -6,6 +6,8 @@ export function subscribe(req, res, next) {
 	let application = res.locals.application;
 	let subscriptionData = req.body.subscription;
 
+	// todo : ID notif
+
 	console.log('subscribe', {
 		application: application,
 		subscriptionData: subscriptionData,
@@ -17,7 +19,7 @@ export function subscribe(req, res, next) {
 		app: application,
 		keys: subscriptionData.keys,
 	}).then(subscription => {
-		if (subscription) {
+		if (subscription.length) {
 			console.log('[subscribe] Already subscribed', subscription)
 
 			res.status(304).json({
