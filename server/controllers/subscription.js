@@ -18,7 +18,16 @@ export function subscribe(req, res, next) {
 		keys: subscriptionData.keys,
 	}).then(subscription => {
 		if (subscription) {
-			res.status(304).json({message: 'Already subscribed'})
+			console.log('[subscribe] Already subscribed', subscription)
+
+			res.status(304).json({
+				message: 'Already subscribed',
+				subscription: subscription,
+				params: {
+					app: application,
+					keys: subscriptionData.keys,
+				}
+			})
 		} else {
 
 			// Creating
@@ -28,8 +37,10 @@ export function subscribe(req, res, next) {
 				expirationTime: subscriptionData.expirationTime,
 				keys: subscriptionData.keys,
 			})
+			console.log('[subscribe] New subscription:', subscription)
 
 			subscription.save().then(subscription => {
+				console.log('[subscribe] New subscription saved:', subscription)
 				res.status(201).json({
 					application: application,
 					subscription: subscription,
