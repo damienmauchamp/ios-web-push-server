@@ -1,3 +1,8 @@
+const baseUrl = ''; // 'https://pi.dmchp.fr:33667';
+const publicKey = "BKe9_9n2T7H390_cF5AncgzlIfv5rH0pKWm62aCqt60VFTsWTiCoYh9u2ALkwv_xIfjIPviDSESVPZ-Z7xZNlMY"
+const appId = '64213ca5d57907b3aa8dd6d5';
+const appToken = 'eyJhbGciOiJIUzI1NiJ9.NjQyMTNjYTVkNTc5MDdiM2FhOGRkNmQ1.jbvDrIrhUdI_tuyONc5FctkswNM0bKGfmVGvHrb36b4';
+
 function urlBase64ToUint8Array(base64String) {
 	const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
 	const base64 = (base64String + padding)
@@ -10,20 +15,6 @@ function urlBase64ToUint8Array(base64String) {
 	}
 	return outputArray;
 }
-
-const baseUrl = ''; // 'https://pi.dmchp.fr:33667';
-const publicKey = "BKe9_9n2T7H390_cF5AncgzlIfv5rH0pKWm62aCqt60VFTsWTiCoYh9u2ALkwv_xIfjIPviDSESVPZ-Z7xZNlMY"
-const appId = '64213ca5d57907b3aa8dd6d5';
-const appToken = 'eyJhbGciOiJIUzI1NiJ9.NjQyMTNjYTVkNTc5MDdiM2FhOGRkNmQ1.jbvDrIrhUdI_tuyONc5FctkswNM0bKGfmVGvHrb36b4';
-
-//////
-let registration;
-window.addEventListener('load', event => {
-	registration = navigator.serviceWorker.register(
-		"serviceworker.js",{scope: "./"}
-	)
-})
-
 //
 let postSubscription = (subscription) => post("/api/subscription", {
 	subscription: subscription,
@@ -34,29 +25,88 @@ let postSubscription = (subscription) => post("/api/subscription", {
 	console.error(err, '[sub] err : ' + err + ' ' + err.statusText + ' - ' + err.status)
 });
 
+let init = async () => {
+	const registration = await navigator.serviceWorker.register("serviceworker.js", {
+		scope: "./",
+	});
 
-let subscribe = () => {
-	// Triggers popup to request access to send notifications
-	window.Notification.requestPermission()
-		.then(result => {
-			if (result !== 'granted') {
-				throw new Error('Not granted');
-			}
+	let appSubscribeButton = document.getElementById('appSubscribe')
+	appSubscribeButton.addEventListener("click", async () => {
 
-			// If the user rejects the permission result will be "denied"
-			registration.pushManager.subscribe({
-				applicationServerKey: urlBase64ToUint8Array(publicKey),
-				userVisibleOnly: true,
-			}).then(postSubscription).catch(e => {
-				alert('Subscription failed : ' + e)
-			})
+		// Triggers popup to request access to send notifications
+		const result = await window.Notification.requestPermission();
+		if (result !== 'granted') { // "denied"
+			alert('not granted')
+			return true;
+		}
 
-		}).catch(err => alert(err));
+		// If the user rejects the permission result will be "denied"
+		registration.pushManager.subscribe({
+			applicationServerKey: urlBase64ToUint8Array(publicKey),
+			userVisibleOnly: true,
+		}).then(postSubscription).catch(e => {
+			alert('Subscription failed : ' + e)
+		})
+	});
+
 }
+init();
+
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+/*
+class PushManager {
+
+	registration = null
+
+	static run = async () => {
+		let test = new PushManager()
+		test.registration = await navigator.serviceWorker.register("serviceworker.js", {
+			scope: "./",
+		});
+		return test;
+	}
+
+	subscribe = () => {
+		console.log('subscribe()', {
+			registration: registration,
+			pushManager: registration.pushManager,
+		})
+		if (!registration) {
+			return;
+		}
+
+		// Triggers popup to request access to send notifications
+		window.Notification.requestPermission()
+			.then(result => {
+				if (result !== 'granted') {
+					throw new Error('Not granted');
+				}
+
+				// If the user rejects the permission result will be "denied"
+				this.registration.pushManager.subscribe({
+					applicationServerKey: urlBase64ToUint8Array(publicKey),
+					userVisibleOnly: true,
+				}).then(postSubscription).catch(e => {
+					alert('Subscription failed : ' + e)
+				})
+
+			}).catch(err => alert(err));
+	}
+
+}
+
+const test = PushManager.run();
+
+
+const registration = navigator.serviceWorker.register("serviceworker.js", {
+	scope: "./",
+});
 
 
 ///////
-
+*/
 
 let post = (url, body = {}, token = null) => {
 
