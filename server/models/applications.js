@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import AppNotification from './notifications.js';
+import mongoose        from "mongoose";
+import AppNotification from './appNotifications.js';
 
 const {Schema} = mongoose;
 

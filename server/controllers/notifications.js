@@ -1,13 +1,13 @@
-import Application     from "../models/apps.js";
-import AppNotification from "../models/notifications.js";
+import Application     from "../models/applications.js";
+import AppNotification from "../models/appNotifications.js";
 
 export function getNotifications(req, res, next) {
 	let application = res.locals.application;
 
 	AppNotification.find({app: application})
 		.populate('app')
-		.populate('parent')
-		.populate('children')
+		// .populate('parent')
+		// .populate('children')
 		.then(notifications => {
 			res.status(200).json(notifications)
 		}).catch(err => res.status(400).json({err}))

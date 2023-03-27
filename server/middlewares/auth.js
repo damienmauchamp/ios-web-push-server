@@ -1,6 +1,6 @@
 import '../env.mjs';
 import jwt         from 'jsonwebtoken';
-import Application from "../models/apps.js";
+import Application from "../models/applications.js";
 
 let getToken = (req) => {
 	const authHeader = req.headers.authorization

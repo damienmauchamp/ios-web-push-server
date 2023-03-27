@@ -1,6 +1,6 @@
 import jwt             from 'jsonwebtoken'
-import Application     from "../models/apps.js";
-import AppNotification from "../models/notifications.js";
+import Application     from "../models/applications.js";
+import AppNotification from "../models/appNotifications.js";
 
 import {getUserToken, userIsMaster} from '../middlewares/auth.js'
 

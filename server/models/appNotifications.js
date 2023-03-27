@@ -1,5 +1,6 @@
 import mongoose    from "mongoose";
-import Application from './apps.js';
+import Application from './applications.js';
+import Subscription from './subscriptions.js';
 
 const {Schema} = mongoose;
 
@@ -30,13 +31,18 @@ const appNotification = Schema({
 	default: {
 		title: {
 			type: String,
-			required: false,
+			required: true,
 		},
 		body: {
 			type: String,
-			required: false,
+			required: true,
 		},
 	},
+	subscriptions: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Subscription',
+		require: false,
+	}],
 	disabled: {
 		type: Boolean,
 		default: false,

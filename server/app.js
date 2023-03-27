@@ -47,12 +47,14 @@ app.use(express.static("./public/assets"));
 // Routes
 import appsRoutes           from './routes/apps.js';
 import notificationsRoutes from './routes/notifications.js';
+import subscriptionRoutes          from './routes/subscription.js';
 import pushRoutes          from './routes/push.js';
 // import testsRoutes          from './routes/tests.js';
 
 //
 app.use('/api/apps', appsRoutes);
 app.use('/api/notifications', notificationsRoutes);
+app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/push', pushRoutes);
 // app.use(testsRoutes);
 
