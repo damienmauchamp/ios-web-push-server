@@ -1,16 +1,9 @@
-import express         from "express";
-import webpush         from "web-push";
-import dotenv          from "dotenv";
-import cors            from 'cors';
-import {fileURLToPath} from 'url';
-import path            from 'path';
-
-//
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import express from "express";
+import webpush from "web-push";
+import cors    from 'cors';
 
 // dotenv
-dotenv.config({path: `${path.normalize(__dirname)}/.env`});
+import './env.mjs';
 
 // web push
 webpush.setVapidDetails(
@@ -18,6 +11,9 @@ webpush.setVapidDetails(
 	process.env.VAPID_PUBLIC_KEY,
 	process.env.VAPID_PRIVATE_KEY
 )
+
+// db
+import './db/conn.mjs';
 
 // app
 const app = express();
@@ -49,15 +45,15 @@ app.use(express.static("./public"));
 app.use(express.static("./public/assets"));
 
 // Routes
-import appRoutes           from './routes/apps.js';
+import appsRoutes           from './routes/apps.js';
 import notificationsRoutes from './routes/notifications.js';
 import pushRoutes          from './routes/push.js';
 // import testsRoutes          from './routes/tests.js';
 
 //
-app.use(appRoutes);
-app.use(notificationsRoutes);
-app.use(pushRoutes);
+app.use('/api/apps', appsRoutes);
+app.use('/api/notifications', notificationsRoutes);
+app.use('/api/push', pushRoutes);
 // app.use(testsRoutes);
 
 /**

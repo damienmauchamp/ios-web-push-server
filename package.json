@@ -11,7 +11,8 @@
     "update": "git pull && npm install",
     "start": "node server/index.mjs",
     "watch": "nodemon index/server.mjs",
-    "certs": "sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/privkey.pem server/certs/private.pem && sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/cert.pem certs/ && sudo chmod +r certs/*.pem"
+    "certs": "sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/privkey.pem server/certs/private.pem && sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/cert.pem certs/ && sudo chmod +r certs/*.pem",
+    "token": "node server/tools/token.js"
   },
   "dependencies": {
     "access-log": "^0.4.1",
@@ -19,8 +20,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^5.1.0",
     "mongoose": "^7.0.3",
     "nodemon": "^2.0.21",
     "web-push": "^3.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.2"
   }
 }

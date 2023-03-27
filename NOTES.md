@@ -90,3 +90,13 @@ ___
   }
 }
 ```
+
+---
+
+# mongodb
+
+- [How to connect NodeJS App with MongoDB database locally](https://youtube.com/watch?v=Co3TTrlG-ok)
+
+# tokens
+
+https://www.digitalocean.com/community/tutorials/nodejs-jwt-expressjs
