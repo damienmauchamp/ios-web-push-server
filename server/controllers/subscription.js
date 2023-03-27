@@ -6,6 +6,12 @@ export function subscribe(req, res, next) {
 	let application = res.locals.application;
 	let subscriptionData = req.body.subscription;
 
+	console.log('subscribe', {
+		application: application,
+		subscriptionData: subscriptionData,
+		body: req.body,
+	})
+
 	// recherche une subscription similaire
 	Subscription.find({
 		app: application,
@@ -24,7 +30,10 @@ export function subscribe(req, res, next) {
 			})
 
 			subscription.save().then(subscription => {
-				res.status(201).json({subscription})
+				res.status(201).json({
+					application: application,
+					subscription: subscription,
+				})
 			}).catch(err => res.status(400).json({err}))
 		}
 	}).catch(err => res.status(400).json({err}))
