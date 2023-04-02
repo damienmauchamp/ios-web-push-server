@@ -81,7 +81,8 @@ export function subscribe(req, res, next) {
 						subscription: subscription,
 					})
 
-					notification.subscriptions.push(subscription).save();
+					notification.subscriptions.push(subscription)
+					notification.save();
 					next();
 				})
 			}
