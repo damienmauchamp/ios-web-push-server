@@ -108,7 +108,7 @@ export function unsubscribe(req, res) {
 
 	let application = res.locals.application;
 	let subscriptionData = req.body.subscription;
-	let notificationId = req.body.notification || ''; // or global ?
+	let notificationId = req.body.notificationId || ''; // or global ?
 
 	console.log('[unsubscribe]', {
 		application: application,
