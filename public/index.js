@@ -13,6 +13,7 @@ const appDev = {
 const appToken = appDev.token;
 
 let getAppToken = () => document.querySelector('#appToken').value || appDev.token;
+let getNotificationId = () => document.querySelector('#notificationId').value;
 
 /**
  * Création d'une application
@@ -33,7 +34,7 @@ let postSubscription = (subscription, notificationId = null) => post('/api/subsc
 
 let deleteSubscription = (subscription, notificationId = null) => del('/api/subscription', {
 	subscription: subscription,
-	notificationId: notificationId,
+	notificationId: getNotificationId(),
 }, getAppToken()).then(res => {
 	console.log(res, '[unsub] ok')
 	// todo : // send("J'suis désabonné !", 'OH NOOOOOOO');
