@@ -78,21 +78,18 @@ export function subscribe(req, res, next) {
 					console.log('[subscribe] New subscription saved:', subscription)
 
 					notification.subscriptions.push(subscription)
-					res.status(201).json({
-						application: application,
-						subscription: subscription,
-					})
+					// res.status(201).json({
+					// 	application: application,
+					// 	subscription: subscription,
+					// })
 					// next();
-					// notification.save().then(notification => {
-					// 	res.status(201).json({
-					// 		application: application,
-					// 		subscription: subscription,
-					// 	})
+					notification.save().then(notification => {
+						res.status(201).json(notification)
 					// 	next();
-					// }).catch(err => {
-					// 	console.error(err);
-					// 	throw new Error('[subscribe] Can\'t save subscription to notification');
-					// });
+					}).catch(err => {
+						console.error('[subscribe] err:', err);
+						throw new Error('[subscribe] Can\'t save subscription to notification');
+					});
 
 				})
 			}
