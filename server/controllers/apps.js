@@ -1,6 +1,7 @@
-import jwt             from 'jsonwebtoken'
-import Application     from "../models/applications.js";
-import AppNotification from "../models/appNotifications.js";
+import jwt               from 'jsonwebtoken'
+import Application       from "../models/applications.js";
+import AppNotification   from "../models/appNotifications.js";
+import {newNotification} from './notifications.js';
 
 import {getUserToken, userIsMaster} from '../middlewares/auth.js'
 
@@ -26,7 +27,7 @@ export function getApps(req, res) {
 	// res.status(200).json({res: '[getApps] not implemented'})
 }
 
-export function createApp(req, res) {
+export function createApp(req, res, next) {
 
 	Application.findOne({name: req.body.name}).exec().then(r => {
 		if (r !== null) {
@@ -50,20 +51,37 @@ export function createApp(req, res) {
 			application.token = jwt.sign(application.id, process.env.TOKEN_SECRET, {});
 			console.log('Generated token', application.token)
 
-			application.save().then(application => {
+			// creating first global notification
+			// token is saved in the creation of the notification
+			newNotification(application, {
+				app: application,
+				parent: null,
+				parentId: null,
+				name: 'Global',
+				type: 'global',
+				description: 'Global notification',
+				default: {
+					title: 'Default',
+					body: 'This is a notification',
+				},
+				disabled: false,
+			}).then(notification => {
+				console.log('Application created', application)
+				console.log('Notification created', notification)
 
-				console.log('App created', application)
-
-				return res.status(201).json({
-					message: `App "${application.name}" created.`
+				res.status(201).json({
+					message: `App "${application.name}" created.`,
+					application: application,
 				});
+				next();
 			}).catch(err => {
+				console.error('App global notification creation failed', err)
 				application.remove();
-				return res.status(400).json({err})
+				throw new Error(err)
 			})
-			console.log('application', application)
-
-		}).catch(err => res.status(400).json({err}))
+		}).catch(err => {
+			res.status(400).json({err});
+		})
 	}).catch(err => res.status(400).json({err}))
 }
 

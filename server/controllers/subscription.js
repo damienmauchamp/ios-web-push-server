@@ -6,8 +6,6 @@ export function subscribe(req, res, next) {
 	let application = res.locals.application;
 	let subscriptionData = req.body.subscription;
 
-	// todo : ID notif
-
 	console.log('subscribe', {
 		application: application,
 		subscriptionData: subscriptionData,
@@ -21,7 +19,6 @@ export function subscribe(req, res, next) {
 	}).then(subscription => {
 		if (subscription.length) {
 			console.log('[subscribe] Already subscribed', subscription)
-
 			res.status(304).json({
 				message: 'Already subscribed',
 				subscription: subscription,
@@ -31,6 +28,12 @@ export function subscribe(req, res, next) {
 				}
 			})
 		} else {
+
+			/**
+			 * @todo Une subscriptionData doit être rattachée à une app (OK)
+			 * @todo Ajouter un type "général" lorsqu'il n'y a pas de notif, par défaut toujours en créer un pour les notifs par défaut ?
+			 * @todo Une subscriptionData doit être rattachée à plusieurs notifications (notifications: [])
+			 */
 
 			// Creating
 			let subscription = new Subscription({

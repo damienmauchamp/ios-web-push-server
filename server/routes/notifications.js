@@ -5,9 +5,12 @@ import {
 	getNotification, editNotification, deleteNotification
 }                from '../controllers/notifications.js';
 
+// /api/notifications
 let router = express.Router();
 
+// GET /api/notifications
 router.get('/', authApp, getNotifications)
+// POST /api/notifications
 router.post('/', authApp, createNotification)
 
 // router.get('/:id', authApp, getNotification)

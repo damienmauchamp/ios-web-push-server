@@ -1,6 +1,7 @@
-import express                      from 'express';
-import {getApps, createApp, getApp} from '../controllers/apps.js';
-import {authApp, authMaster, authAppOrMaster}                 from '../middlewares/auth.js'
+import express                                from 'express';
+import {getApps, createApp, getApp}           from '../controllers/apps.js';
+import {authApp, authMaster, authAppOrMaster} from '../middlewares/auth.js'
+import {createNotification}                   from "../controllers/notifications.js";
 
 let router = express.Router();
 
