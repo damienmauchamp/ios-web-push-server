@@ -14,6 +14,7 @@ const appToken = appDev.token;
 
 let getAppToken = () => document.querySelector('#appToken').value || appDev.token;
 let getNotificationId = () => document.querySelector('#notificationId').value;
+let getDefaultNotificationId = () => document.querySelector('#notificationId option[data-default="1"]').value;
 
 /**
  * Création d'une application
@@ -144,7 +145,7 @@ let init = async () => {
 				alert('Not subscribed !!');
 				return;
 			}
-			sendPersonalNotification(null, subscription, 'Body perso', 'Titre perso')
+			sendPersonalNotification(getNotificationId(), subscription, 'Body perso', 'Titre perso')
 		}).catch(e => {
 			alert('Unsubscription failed : ' + e)
 		})
@@ -152,7 +153,7 @@ let init = async () => {
 	});
 	let appSendAllTestNotificationButton = document.getElementById('appSendAllTestNotification')
 	appSendAllTestNotificationButton.addEventListener("click", async () => {
-		sendAllNotification(null, 'Body perso', 'Titre perso')
+		sendAllNotification(getNotificationId(), 'Body perso', 'Titre perso')
 	});
 
 
