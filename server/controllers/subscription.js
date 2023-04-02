@@ -54,8 +54,8 @@ export function subscribe(req, res, next) {
 						keys: subscriptionData.keys,
 					}
 				})
-				next();
-
+				// next();
+				// return true;
 			} else {
 
 				/**
