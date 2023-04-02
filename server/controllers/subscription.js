@@ -6,8 +6,8 @@ export function subscribe(req, res, next) {
 
 	let application = res.locals.application;
 	let subscriptionData = req.body.subscription;
-	let notificationId = req.body.notification; // or global ?
-	// let notification;
+	let notificationId = req.body.notification || ''; // or global ?
+
 	console.log('subscribe', {
 		application: application,
 		subscriptionData: subscriptionData,
@@ -86,5 +86,8 @@ export function subscribe(req, res, next) {
 				})
 			}
 		})
-	}).catch(err => res.status(400).json({err}))
+	}).catch(err => {
+		console.error('Error while subscribing:', err)
+		res.status(400).json({err})
+	})
 }
