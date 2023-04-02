@@ -82,7 +82,7 @@ export function subscribe(req, res, next) {
 						application: application,
 						subscription: subscription,
 					})
-					next();
+					// next();
 					// notification.save().then(notification => {
 					// 	res.status(201).json({
 					// 		application: application,
