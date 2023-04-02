@@ -118,6 +118,13 @@ export function unsubscribe(req, res) {
 	})
 
 	new Promise((resolve, reject) => {
+
+		if (!notificationId) {
+			console.log('[unsubscribe] No notification ID');
+			reject(`No notification ID`);
+			return false;
+		}
+
 		AppNotifications.findById(notificationId).then(notification => {
 			if (!notification) {
 				reject(`Can't find global notification`);
