@@ -148,9 +148,8 @@ export function unsubscribe(req, res) {
 			} else {
 
 				let subscriptionId = subscription._id;
-				// subscription.remove().then(err => {
-				Subscription.findByIdAndDelete(subscriptionId).then(err => {
-					console.log('[unsubscribe] findByIdAndDelete err:', err)
+				Subscription.findByIdAndDelete(subscriptionId).then(subscription => {
+					console.log('[unsubscribe] subscription deleted:', subscription)
 
 					AppNotifications.updateOne({_id: notificationId}, {
 						$pullAll: {
@@ -160,13 +159,25 @@ export function unsubscribe(req, res) {
 						}
 					}).then(updateOneRes => {
 						console.log('[unsubscribe] updateOneRes:', updateOneRes)
+						console.log('[unsubscribe] Successfully unsubscribed')
+						res.status(200).json({
+							message: 'Successfully unsubscribed'
+						})
+
+					}).catch(err => {
+						console.error('[unsubscribe] Error while deleting associations')
+						res.status(400).json({
+							message: 'Error while deleting associations',
+							error: err,
+						})
 					})
 
-					console.log('[unsubscribe] Successfully unsubscribed')
-					res.status(200).json({
-						message: 'Successfully unsubscribed'
+				}).catch(err => {
+					console.error('[unsubscribe] Error while deleting subscription')
+					res.status(400).json({
+						message: 'Error while deleting subscription',
+						error: err,
 					})
-
 				})
 			}
 
