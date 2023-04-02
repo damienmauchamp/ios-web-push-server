@@ -84,7 +84,11 @@ export function subscribe(req, res, next) {
 					// })
 					// next();
 					notification.save().then(notification => {
-						res.status(201).json(notification)
+						console.log('[subscribe] Notification saved:', notification)
+						res.status(201).json({
+							id: notification._id,
+							subscription: subscription._id,
+						})
 					// 	next();
 					}).catch(err => {
 						console.error('[subscribe] err:', err);
