@@ -148,7 +148,9 @@ export function unsubscribe(req, res) {
 			} else {
 
 				let subscriptionId = subscription._id;
-				subscription.remove().then(err => {
+				// subscription.remove().then(err => {
+				Subscription.findByIdAndDelete(subscriptionId).then(err => {
+					console.log('[unsubscribe] findByIdAndDelete err:', err)
 
 					AppNotifications.updateOne({_id: notificationId}, {
 						$pullAll: {
@@ -156,6 +158,8 @@ export function unsubscribe(req, res) {
 								_id: subscriptionId
 							}]
 						}
+					}).then(updateOneRes => {
+						console.log('[unsubscribe] updateOneRes:', updateOneRes)
 					})
 
 					console.log('[unsubscribe] Successfully unsubscribed')
