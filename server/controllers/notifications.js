@@ -37,22 +37,21 @@ export function newNotification(application, data) {
 		}
 
 		// On recherche le type général, s'il n'y en a pas et que l'app n'en a pas, on
-		if (notification.type === 'global') {
-			let globalNotification = await AppNotification.find({
-				app: notification.app,
-				type: notification.type,
-			}).then(globalNotification => {
-				console.log('globalNotification', globalNotification)
-				return globalNotification;
-			}).catch(err => {
-				console.log('Global notification ERR', err)
-				return false;
-			})
+		let messageType = notification.type === 'global' ? 'Global' : `"${notification.type}"`
+		let globalNotification = await AppNotification.findOne({
+			app: notification.app,
+			type: notification.type,
+		}).then(globalNotification => {
+			console.log('globalNotification', globalNotification)
+			return globalNotification;
+		}).catch(err => {
+			console.log(`${messageType} notification ERR`, err)
+			return false;
+		})
 
-			if (globalNotification && globalNotification.length) {
-				reject('Global notification already exists');
-				return false;
-			}
+		if (globalNotification) {
+			reject(`${messageType} notification already exists`);
+			return false;
 		}
 
 		// Gestion du parentId
