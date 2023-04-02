@@ -27,22 +27,40 @@ let postSubscription = (subscription, notificationId = null) => post('/api/subsc
 	notificationId: notificationId,
 }, getAppToken()).then(res => {
 	console.log(res, '[sub] ok')
-	// todo : // send("J'suis abonné !", 'Ouais ouais ouaisssssss');
+	// todo : sendGlobal( va cherche l'ID de la notif en back)
+	// if (!notificationId) {
+	// 	return;
+	// }
+	sendAllNotification(getNotificationId(), 'Nous avons un nouvel abonné !', 'Nouvel abonné')
+	sendPersonalNotification(getNotificationId(), subscription, "J'suis abonné !", 'Bienvenue !');
 }).catch(err => {
 	console.error(err, '[sub] err : ' + err + ' ' + err.statusText + ' - ' + err.status)
 });
 
 let deleteSubscription = (subscription, notificationId = null) => del('/api/subscription', {
 	subscription: subscription,
-	notificationId: getNotificationId(),
+	notificationId: notificationId || getNotificationId(),
 }, getAppToken()).then(res => {
 	console.log(res, '[unsub] ok')
-	// todo : // send("J'suis désabonné !", 'OH NOOOOOOO');
+	sendAllNotification(getNotificationId(), 'Quelqu\'un nous quitte !', 'Oh nooon !')
 }).catch(err => {
 	console.error(err, '[unsub] err : ' + err + ' ' + err.statusText + ' - ' + err.status)
 });
 
-// let sendNotification = () => post('')
+let sendNotification = (body = null, title = null, notificationId = null, subscription = null) => post("/api/push", {
+	title: title,
+	body: body,
+	notificationId: notificationId,
+	subscription: subscription,
+}, getAppToken()).then(res => {
+	console.log(res, '[send] ok')
+}).catch(err => {
+	console.error(err, '[send] err : ' + err + ' ' + err.statusText + ' - ' + err.status)
+});
+
+let sendAllNotification = (notificationId = null, body = null, title = null) => sendNotification(body, title, notificationId);
+let sendPersonalNotification = (notificationId = null, subscription, body = null, title = null) => sendNotification(body, title, notificationId, subscription);
+
 
 
 /////////////////////////////////////////////////////////
@@ -100,13 +118,44 @@ let init = async () => {
 	// appUnsubscribe, for specific app/notification
 	let appUnsubscribeButton = document.getElementById('appUnsubscribe')
 	appUnsubscribeButton.addEventListener("click", async () => {
-		registration.pushManager.subscribe({
-			applicationServerKey: urlBase64ToUint8Array(publicKey),
-			userVisibleOnly: true,
-		}).then(deleteSubscription).catch(e => {
+		// registration.pushManager.subscribe({
+		// 	applicationServerKey: urlBase64ToUint8Array(publicKey),
+		// 	userVisibleOnly: true,
+		// }).then(deleteSubscription).catch(e => {
+		registration.pushManager.getSubscription().then(subscription => {
+			console.log('subscription:', subscription)
+			if (!subscription) {
+				alert('Not subscribed !!');
+				return;
+			}
+
+			deleteSubscription(subscription);
+		}).catch(e => {
 			alert('Unsubscription failed : ' + e)
 		})
 	});
+
+	// appSendTestNotification, testing
+	let appSendPersonalTestNotificationButton = document.getElementById('appSendPersonalTestNotification')
+	appSendPersonalTestNotificationButton.addEventListener("click", async () => {
+		registration.pushManager.getSubscription().then(subscription => {
+			console.log('subscription:', subscription)
+			if (!subscription) {
+				alert('Not subscribed !!');
+				return;
+			}
+			sendPersonalNotification(null, subscription, 'Body perso', 'Titre perso')
+		}).catch(e => {
+			alert('Unsubscription failed : ' + e)
+		})
+
+	});
+	let appSendAllTestNotificationButton = document.getElementById('appSendAllTestNotification')
+	appSendAllTestNotificationButton.addEventListener("click", async () => {
+		sendAllNotification(null, 'Body perso', 'Titre perso')
+	});
+
+
 
 }
 init();
