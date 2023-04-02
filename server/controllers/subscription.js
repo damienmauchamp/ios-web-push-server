@@ -20,14 +20,16 @@ export function subscribe(req, res, next) {
 			// checking notificationId
 			AppNotifications.findById(notificationId).then(notification => {
 				if (!notification) {
-					throw new Error(`Can't find notification with ID ${notificationId}`);
+					reject(`Can't find notification with ID ${notificationId}`);
+					return false;
 				}
 				return resolve(notification);
 			})
 		} else {
 			AppNotifications.findOne({type: 'global'}).then(notification => {
 				if (!notification) {
-					throw new Error(`Can't find global notification`);
+					reject(`Can't find global notification`);
+					return false;
 				}
 				return resolve(notification);
 			})
