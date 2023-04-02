@@ -153,7 +153,7 @@ let init = async () => {
 	});
 	let appSendAllTestNotificationButton = document.getElementById('appSendAllTestNotification')
 	appSendAllTestNotificationButton.addEventListener("click", async () => {
-		sendAllNotification(getNotificationId(), 'Body perso', 'Titre perso')
+		sendAllNotification(getNotificationId(), 'Body global !', 'Titre global !')
 	});
 
 
