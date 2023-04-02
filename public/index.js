@@ -1,35 +1,47 @@
 const baseUrl = ''; // 'https://pi.dmchp.fr:33667';
 const publicKey = "BKe9_9n2T7H390_cF5AncgzlIfv5rH0pKWm62aCqt60VFTsWTiCoYh9u2ALkwv_xIfjIPviDSESVPZ-Z7xZNlMY"
-const appId = '64213ca5d57907b3aa8dd6d5';
-const appToken = 'eyJhbGciOiJIUzI1NiJ9.NjQyMTNjYTVkNTc5MDdiM2FhOGRkNmQ1.jbvDrIrhUdI_tuyONc5FctkswNM0bKGfmVGvHrb36b4';
-
-function urlBase64ToUint8Array(base64String) {
-	const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-	const base64 = (base64String + padding)
-		.replace(/-/g, "+")
-		.replace(/_/g, "/");
-	const rawData = atob(base64);
-	const outputArray = new Uint8Array(rawData.length);
-	for (let i = 0; i < rawData.length; ++i) {
-		outputArray[i] = rawData.charCodeAt(i);
-	}
-	return outputArray;
+const appDev = {
+	"_id": "64299f8c4ab02f51a70ca340",
+	"name": "My Test !",
+	"token": "eyJhbGciOiJIUzI1NiJ9.NjQyOTlmOGM0YWIwMmY1MWE3MGNhMzQw.erU65DGkzgRALOFwPMlEAJmbqLsXr8VgzI7Q0m_spW8",
+	"notifications": [
+		'64299f8d4ab02f51a70ca342', // global
+	],
+	"disabled": false,
+	"__v": 0
 }
-//
-let postSubscription = (subscription) => post("/api/subscription", {
+const appToken = appDev.token;
+
+let getAppToken = () => document.querySelector('#appToken').value || appDev.token;
+
+/**
+ * Création d'une application
+ * @method POST /api/apps
+ * @param subscription
+ * @param {String|null} notificationId
+ * @returns {Promise<Response>}
+ */
+let postSubscription = (subscription, notificationId = null) => post('/api/subscription', {
 	subscription: subscription,
-}, appToken).then(res => {
+	notificationId: notificationId,
+}, getAppToken()).then(res => {
 	console.log(res, '[sub] ok')
 	// todo : // send("J'suis abonné !", 'Ouais ouais ouaisssssss');
 }).catch(err => {
 	console.error(err, '[sub] err : ' + err + ' ' + err.statusText + ' - ' + err.status)
 });
 
+// let sendNotification = () => post('')
+
+
+/////////////////////////////////////////////////////////
+// RUN
 let init = async () => {
 	const registration = await navigator.serviceWorker.register("serviceworker.js", {
 		scope: "./",
 	});
 
+	// appSubscribe
 	let appSubscribeButton = document.getElementById('appSubscribe')
 	appSubscribeButton.addEventListener("click", async () => {
 
@@ -51,6 +63,21 @@ let init = async () => {
 
 }
 init();
+
+/////////////////////////////////////////////////////////
+// UTILES
+function urlBase64ToUint8Array(base64String) {
+	const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+	const base64 = (base64String + padding)
+		.replace(/-/g, "+")
+		.replace(/_/g, "/");
+	const rawData = atob(base64);
+	const outputArray = new Uint8Array(rawData.length);
+	for (let i = 0; i < rawData.length; ++i) {
+		outputArray[i] = rawData.charCodeAt(i);
+	}
+	return outputArray;
+}
 
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
