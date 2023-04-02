@@ -31,9 +31,42 @@ let postSubscription = (subscription, notificationId = null) => post('/api/subsc
 	console.error(err, '[sub] err : ' + err + ' ' + err.statusText + ' - ' + err.status)
 });
 
+let deleteSubscription = (subscription, notificationId = null) => del('/api/subscription', {
+	subscription: subscription,
+	notificationId: notificationId,
+}, getAppToken()).then(res => {
+	console.log(res, '[unsub] ok')
+	// todo : // send("J'suis désabonné !", 'OH NOOOOOOO');
+}).catch(err => {
+	console.error(err, '[unsub] err : ' + err + ' ' + err.statusText + ' - ' + err.status)
+});
+
 // let sendNotification = () => post('')
 
 
+/////////////////////////////////////////////////////////
+let post = (url, body = {}, token = null) => {
+	let headers = {"Content-Type": "application/json"}
+	if (token) {
+		headers.Authorization = `Bearer ${token}`;
+	}
+	return fetch(url, {
+		method: "post",
+		headers: headers,
+		body: JSON.stringify(body),
+	});
+}
+let del = (url, body = {}, token = null) => {
+	let headers = {"Content-Type": "application/json"}
+	if (token) {
+		headers.Authorization = `Bearer ${token}`;
+	}
+	return fetch(url, {
+		method: "delete",
+		headers: headers,
+		body: JSON.stringify(body),
+	});
+}
 /////////////////////////////////////////////////////////
 // RUN
 let init = async () => {
@@ -48,16 +81,29 @@ let init = async () => {
 		// Triggers popup to request access to send notifications
 		const result = await window.Notification.requestPermission();
 		if (result !== 'granted') { // "denied"
+			// If the user rejects the permission result will be "denied"
 			alert('not granted')
 			return true;
 		}
 
-		// If the user rejects the permission result will be "denied"
 		registration.pushManager.subscribe({
 			applicationServerKey: urlBase64ToUint8Array(publicKey),
 			userVisibleOnly: true,
 		}).then(postSubscription).catch(e => {
 			alert('Subscription failed : ' + e)
+		})
+	});
+
+	// todo : registration.pushManager.unsubscribe :bool, unsubscribe from all
+
+	// appUnsubscribe, for specific app/notification
+	let appUnsubscribeButton = document.getElementById('appUnsubscribe')
+	appUnsubscribeButton.addEventListener("click", async () => {
+		registration.pushManager.subscribe({
+			applicationServerKey: urlBase64ToUint8Array(publicKey),
+			userVisibleOnly: true,
+		}).then(deleteSubscription).catch(e => {
+			alert('Unsubscription failed : ' + e)
 		})
 	});
 
@@ -134,20 +180,6 @@ const registration = navigator.serviceWorker.register("serviceworker.js", {
 
 ///////
 */
-
-let post = (url, body = {}, token = null) => {
-
-	let headers = {"Content-Type": "application/json"}
-	if (token) {
-		headers.Authorization = `Bearer ${token}`;
-	}
-
-	return fetch(url, {
-		method: "post",
-		headers: headers,
-		body: JSON.stringify(body),
-	});
-}
 
 
 /***/

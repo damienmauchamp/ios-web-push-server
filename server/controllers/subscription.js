@@ -2,13 +2,13 @@
 import AppNotifications from "../models/appNotifications.js";
 import Subscription     from "../models/subscriptions.js";
 
-export function subscribe(req, res, next) {
+export function subscribe(req, res) {
 
 	let application = res.locals.application;
 	let subscriptionData = req.body.subscription;
 	let notificationId = req.body.notification || ''; // or global ?
 
-	console.log('subscribe', {
+	console.log('[subscribe]', {
 		application: application,
 		subscriptionData: subscriptionData,
 		notificationId: notificationId,
@@ -64,14 +64,14 @@ export function subscribe(req, res, next) {
 				 * @todo Une subscriptionData doit être rattachée à plusieurs notifications (notifications: [])
 				 */
 
-				// Creating
+					// Creating
 				let subscription = new Subscription({
-					app: application,
-					notification: notification,
-					endpoint: subscriptionData.endpoint,
-					expirationTime: subscriptionData.expirationTime,
-					keys: subscriptionData.keys,
-				})
+						app: application,
+						notification: notification,
+						endpoint: subscriptionData.endpoint,
+						expirationTime: subscriptionData.expirationTime,
+						keys: subscriptionData.keys,
+					})
 				console.log('[subscribe] New subscription:', subscription)
 
 				subscription.save().then(subscription => {
@@ -89,7 +89,7 @@ export function subscribe(req, res, next) {
 							id: notification._id,
 							subscription: subscription._id,
 						})
-					// 	next();
+						// 	next();
 					}).catch(err => {
 						console.error('[subscribe] err:', err);
 						throw new Error('[subscribe] Can\'t save subscription to notification');
@@ -98,6 +98,69 @@ export function subscribe(req, res, next) {
 				})
 			}
 		})
+	}).catch(err => {
+		console.error('Error while subscribing:', err)
+		res.status(400).json({err})
+	})
+}
+
+export function unsubscribe(req, res) {
+
+	let application = res.locals.application;
+	let subscriptionData = req.body.subscription;
+	let notificationId = req.body.notification || ''; // or global ?
+
+	console.log('[unsubscribe]', {
+		application: application,
+		subscriptionData: subscriptionData,
+		notificationId: notificationId,
+		body: req.body,
+	})
+
+	new Promise((resolve, reject) => {
+		AppNotifications.findById(notificationId).then(notification => {
+			if (!notification) {
+				reject(`Can't find global notification`);
+				return false;
+			}
+			return resolve(notification);
+		})
+	}).then(notification => {
+		console.log('[unsubscribe] Notification found:', notification);
+		Subscription.findOne({
+			app: application,
+			notification: notification,
+			keys: subscriptionData.keys,
+		}).then(subscription => {
+			if (!subscription) {
+				// Not subscribed
+				console.log('[unsubscribe] Not subscribed');
+				res.status(304).json({
+					message: 'Not subscribed'
+				})
+			} else {
+
+				let subscriptionId = subscription._id;
+				subscription.remove().then(err => {
+
+					AppNotifications.updateOne({_id: notificationId}, {
+						$pullAll: {
+							subscriptions: [{
+								_id: subscriptionId
+							}]
+						}
+					})
+
+					console.log('[unsubscribe] Successfully unsubscribed')
+					res.status(200).json({
+						message: 'Successfully unsubscribed'
+					})
+
+				})
+			}
+
+		})
+
 	}).catch(err => {
 		console.error('Error while subscribing:', err)
 		res.status(400).json({err})
