@@ -28,9 +28,11 @@ Enable it to run on boot with `systemctl enable ios-web-push`.
 See logs with `journalctl -u ios-web-push`
 
 
+## Reload
 
-
-
+```
+$ git pull && sudo systemctl restart ios-web-push.service
+```
 
 ## Sources 
 

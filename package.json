@@ -12,7 +12,8 @@
     "start": "node server/index.mjs",
     "watch": "nodemon index/server.mjs",
     "certs": "sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/privkey.pem server/certs/private.pem && sudo cp /etc/letsencrypt/live/web.push.dmchp.fr/cert.pem certs/ && sudo chmod +r certs/*.pem",
-    "token": "node server/tools/token.js"
+    "token": "node server/tools/token.js",
+    "reload": "git pull && sudo systemctl restart ios-web-push.service"
   },
   "dependencies": {
     "access-log": "^0.4.1",
