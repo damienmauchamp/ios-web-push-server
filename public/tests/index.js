@@ -1,4 +1,4 @@
-const baseUrl = ''; // 'https://pi.dmchp.fr:33667';
+// const baseUrl = ''; // 'https://pi.dmchp.fr:33667';
 const publicKey = "BKe9_9n2T7H390_cF5AncgzlIfv5rH0pKWm62aCqt60VFTsWTiCoYh9u2ALkwv_xIfjIPviDSESVPZ-Z7xZNlMY"
 const appDev = {
 	"_id": "64299f8c4ab02f51a70ca340",
@@ -11,6 +11,8 @@ const appDev = {
 	"__v": 0
 }
 const appToken = appDev.token;
+// const serviceWorkerPath = 'serviceworker.js';
+const serviceWorkerPath = '../serviceworker.js';
 
 let getAppToken = () => document.querySelector('#appToken').value || appDev.token;
 let getNotificationId = () => document.querySelector('#notificationId').value;
@@ -90,7 +92,7 @@ let del = (url, body = {}, token = null) => {
 /////////////////////////////////////////////////////////
 // RUN
 let init = async () => {
-	const registration = await navigator.serviceWorker.register("serviceworker.js", {
+	const registration = await navigator.serviceWorker.register(serviceWorkerPath, {
 		scope: "./",
 	});
 
@@ -261,7 +263,7 @@ let saveUnsubscription = (subscription, successful) => post("/save-unsubscriptio
 async function run() {
 	// A service worker must be registered in order to send notifications on iOS
 	const registration = await navigator.serviceWorker.register(
-		"serviceworker.js",
+		serviceWorkerPath,
 		{
 			scope: "./",
 		}
