@@ -25,11 +25,6 @@ app.use(cors({origin: true}));
 app.enable('trust proxy')
 app.use((request, response, next) => {
 	console.log(`ACCESS: ${request.protocol}://${request.headers.host}${request.url}`)
-
-	if (/\.well-known\/acme-challenge/.test(request.url)) {
-		next();
-	}
-
 	if (process.env.ENV !== 'development' && !request.secure) {
 		console.log('HTTPS redirect : https://' + request.headers.host + request.url)
 		return response.redirect("https://" + request.headers.host + request.url);
